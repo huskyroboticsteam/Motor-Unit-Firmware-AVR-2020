@@ -1,3 +1,4 @@
+#include "CANLibrary.h"
 #include "config.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -5,8 +6,6 @@
 #include <avr/wdt.h>
 #include <string.h>
 #include <stdlib.h>
-
-#include "CANLibrary.h"
 
 #include "pwm.h"
 #include "encoder.h"
@@ -21,6 +20,9 @@
 #include "usart.h"
 #include "bss.h"
 
+uint8_t get_dip_switch(){
+	return (~PINA) & 0xF;
+}
 
 int main(){
 	CANPacket m;

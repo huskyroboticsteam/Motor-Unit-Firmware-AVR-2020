@@ -10,6 +10,8 @@
 #define F_CPU 16000000L
 #endif
 
+#include "config.h"
+
 #define CAN_1000_BAUD 0x020413L
 #define CAN_500_BAUD 0x060413L
 #define CAN_250_BAUD 0x0E0413L
@@ -126,11 +128,6 @@ void init_CAN(uint32_t rate, uint16_t deviceGroup, uint16_t deviceSerial){
 	msgs_av = 0;
 	//Enable the CAN controller
 	CANGCON = (1 << ENASTB);
-}
-
-/*Returns the value of the binary representation of the dipswitch*/
-uint8_t inline get_dip_switch(){
-	return (~PINA) & 0xF;
 }
 
 /*Returns the number of CAN messages waiting*/

@@ -10,8 +10,8 @@ motor.d motor.o: .././motor.c \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\version.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\fuse.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h \
- .././config.h ../include/timers.h ../include/pwm.h ../include/adc.h \
- ../include/encoder.h ../include/motor.h ../include/config.h \
+ ../include/config.h ../include/timers.h ../include/pwm.h \
+ ../include/adc.h ../include/encoder.h ../include/motor.h \
  ../include/can.h ../include/messaging.h ../HindsightCAN/CANPacket.h \
  ../HindsightCAN/CANSerialNumbers.h ../include/usart.h \
  ../include/config.h ../include/util.h
@@ -38,7 +38,7 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h:
 
-.././config.h:
+../include/config.h:
 
 ../include/timers.h:
 
@@ -49,8 +49,6 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 ../include/encoder.h:
 
 ../include/motor.h:
-
-../include/config.h:
 
 ../include/can.h:
 

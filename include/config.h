@@ -1,6 +1,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include <avr/io.h>
+
 #define F_CPU 16000000L
 
 #define VS_PIN 1
@@ -46,6 +48,8 @@
 //#define DEBUG //Debug flag
 
 #endif
+
+extern uint8_t get_dip_switch();
 
 //Define REV_2 to use Revision 2 firmware
 #define REV_2

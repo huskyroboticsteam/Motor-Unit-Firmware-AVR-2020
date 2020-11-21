@@ -13,7 +13,7 @@ messaging.d messaging.o: .././messaging.c \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\string.h \
- .././config.h ../include/can.h ../include/motor.h ../include/config.h \
+ ../include/config.h ../include/can.h ../include/motor.h \
  ../include/encoder.h ../include/servo.h ../include/adc.h \
  ../include/usart.h ../include/config.h ../include/messaging.h \
  ../HindsightCAN/CANPacket.h ../HindsightCAN/CANSerialNumbers.h \
@@ -48,13 +48,11 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\string.h:
 
-.././config.h:
+../include/config.h:
 
 ../include/can.h:
 
 ../include/motor.h:
-
-../include/config.h:
 
 ../include/encoder.h:
 
