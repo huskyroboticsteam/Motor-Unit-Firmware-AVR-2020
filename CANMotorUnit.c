@@ -2,7 +2,7 @@
  * Authors:      Jaden Bottemiller, Benton Kwong, Dylan Tomberlin.
  * Organization: Husky Robotics Team
  * 
- * This file includes fuction definitions for CAN Packet manipulation
+ * This file includes function definitions for CAN Packet manipulation
  * using the Hindsight CAN Communication standard. Specific files
  * for the motor unit boards.
  * Documentation: https://huskyroboticsteam.slite.com/app/channels/iU0BryG7M9/collections/aXvWTcIR6c/notes/4otlSFsSp2
@@ -37,12 +37,12 @@ void AssemblePWMDirSetPacket(CANPacket *packetToAssemble,
     packetToAssemble->id = ConstructCANID(PRIO_MOTOR_UNIT_PWM_DIR_SET, targetDeviceGroup, targetDeviceSerial);
     packetToAssemble->dlc = DLC_MOTOR_UNIT_PWM_DIR_SET;
     int nextByte = WritePacketIDOnly(packetToAssemble->data, DLC_MOTOR_UNIT_PWM_DIR_SET);
-    PackIntIntoDataMSBFirst(packetToAssemble->data, PWMSet, nextByte);
+    PackShortIntoDataMSBFirst(packetToAssemble->data, PWMSet, nextByte);
 }
 
 int32_t GetPWMFromPacket(CANPacket *packet)
 {
-    return DecodeBytesToIntMSBFirst(packet->data, 1, 4);
+    return DecodeBytesToIntMSBFirst(packet->data, 1, 2);
 }
 
 //Returns 2's compliment MSB (0 for stopped or forward, 1 for reverse)

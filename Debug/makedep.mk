@@ -8,13 +8,9 @@ bss.c
 
 CANCommon.c
 
-CANLocalization.c
-
 CANMotorUnit.c
 
 CANPacket.c
-
-CANPower.c
 
 encoder.c
 

@@ -1,16 +1,18 @@
-CANMotorUnit.d CANMotorUnit.o: .././CANMotorUnit.c ../CANLib/CANPacket.h \
+CANMotorUnit.d CANMotorUnit.o: .././CANMotorUnit.c \
+ ../HindsightCAN/CANPacket.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdint.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdint.h \
- ../CANLib/CANSerialNumbers.h ../CANLib/CANMotorUnit.h ../CANLib/Port.h
+ ../HindsightCAN/CANSerialNumbers.h ../HindsightCAN/CANMotorUnit.h \
+ ../HindsightCAN/Port.h
 
-../CANLib/CANPacket.h:
+../HindsightCAN/CANPacket.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdint.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdint.h:
 
-../CANLib/CANSerialNumbers.h:
+../HindsightCAN/CANSerialNumbers.h:
 
-../CANLib/CANMotorUnit.h:
+../HindsightCAN/CANMotorUnit.h:
 
-../CANLib/Port.h:
+../HindsightCAN/Port.h:

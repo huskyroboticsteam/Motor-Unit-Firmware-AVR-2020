@@ -4,8 +4,7 @@ main.d main.o: .././main.c .././config.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\inttypes.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdint.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdint.h \
- C:\Program\ Files\ (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include/avr/iocan32.h \
- C:\Program\ Files\ (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include/avr/iocanxx.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\iocan32.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\portpins.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\common.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\version.h \
@@ -19,10 +18,11 @@ main.d main.o: .././main.c .././config.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\string.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h \
- ../CANLib/CANLibrary.h ../CANLib/CANPacket.h \
- ../CANLib/CANSerialNumbers.h ../CANLib/CANCommon.h ../CANLib/Port.h \
- ../CANLib/CANGPIO.h ../CANLib/CANLocalization.h ../CANLib/CANMotorUnit.h \
- ../CANLib/CANPower.h ../include/pwm.h ../include/encoder.h \
+ ../HindsightCAN/CANLibrary.h ../HindsightCAN/CANPacket.h \
+ ../HindsightCAN/CANSerialNumbers.h ../HindsightCAN/CANCommon.h \
+ ../HindsightCAN/Port.h ../HindsightCAN/CANGPIO.h \
+ ../HindsightCAN/CANLocalization.h ../HindsightCAN/CANMotorUnit.h \
+ ../HindsightCAN/CANPower.h ../include/pwm.h ../include/encoder.h \
  ../include/motor.h ../include/config.h ../include/timers.h \
  ../include/adc.h ../include/can.h ../include/messaging.h \
  ../include/util.h ../include/servo.h ../include/usart.h \
@@ -40,9 +40,7 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdint.h:
 
-C:\Program\ Files\ (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include/avr/iocan32.h:
-
-C:\Program\ Files\ (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include/avr/iocanxx.h:
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\iocan32.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\portpins.h:
 
@@ -70,23 +68,23 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h:
 
-../CANLib/CANLibrary.h:
+../HindsightCAN/CANLibrary.h:
 
-../CANLib/CANPacket.h:
+../HindsightCAN/CANPacket.h:
 
-../CANLib/CANSerialNumbers.h:
+../HindsightCAN/CANSerialNumbers.h:
 
-../CANLib/CANCommon.h:
+../HindsightCAN/CANCommon.h:
 
-../CANLib/Port.h:
+../HindsightCAN/Port.h:
 
-../CANLib/CANGPIO.h:
+../HindsightCAN/CANGPIO.h:
 
-../CANLib/CANLocalization.h:
+../HindsightCAN/CANLocalization.h:
 
-../CANLib/CANMotorUnit.h:
+../HindsightCAN/CANMotorUnit.h:
 
-../CANLib/CANPower.h:
+../HindsightCAN/CANPower.h:
 
 ../include/pwm.h:
 
