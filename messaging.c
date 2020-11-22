@@ -31,7 +31,7 @@ void handle_CAN_message(CANPacket *m){
 			break;
 		case ID_MOTOR_UNIT_PWM_DIR_SET: //Set PWM/Direction
 			if(!(get_motor_mode() & MOTOR_MODE_PID)){
-				int16_t mp = GetPWMFromPacket(m) / 64;
+				int16_t mp = GetPWMFromPacket(m) / 32;
 				set_motor_power(mp);
 			}
 			break;
