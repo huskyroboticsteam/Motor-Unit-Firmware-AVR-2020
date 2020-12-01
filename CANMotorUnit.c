@@ -1,5 +1,5 @@
 /* File:         CANMotorUnit.c
- * Authors:      Jaden Bottemiller, Benton Kwong, Dylan Tomberlin.
+ * Authors:      Jaden Bottemiller, Benton Kwong, Dylan Tomberlin, Austin Chan.
  * Organization: Husky Robotics Team
  * 
  * This file includes function definitions for CAN Packet manipulation
@@ -32,7 +32,7 @@ uint8_t GetModeFromPacket(CANPacket *packet)
 void AssemblePWMDirSetPacket(CANPacket *packetToAssemble, 
     uint8_t targetDeviceGroup,
     uint8_t targetDeviceSerial,
-    int32_t PWMSet)
+    int16_t PWMSet)
 {
     packetToAssemble->id = ConstructCANID(PRIO_MOTOR_UNIT_PWM_DIR_SET, targetDeviceGroup, targetDeviceSerial);
     packetToAssemble->dlc = DLC_MOTOR_UNIT_PWM_DIR_SET;
@@ -167,7 +167,7 @@ void AssembleMaxJointRevolutionPacket(CANPacket *packetToAssemble,
     uint32_t revolutions)
 {
     packetToAssemble->id = ConstructCANID(PRIO_MOTOR_UNIT_MAX_JNT_REV_SET, targetDeviceGroup, targetDeviceSerial);
-    packetToAssemble->id = DLC_MOTOR_UNIT_MAX_JNT_REV_SET;
+    packetToAssemble->dlc = DLC_MOTOR_UNIT_MAX_JNT_REV_SET;
     int nextByte = WritePacketIDOnly(packetToAssemble->data, ID_MOTOR_UNIT_MAX_JNT_REV_SET);
     PackIntIntoDataMSBFirst(packetToAssemble->data, revolutions, nextByte);
     
@@ -175,4 +175,42 @@ void AssembleMaxJointRevolutionPacket(CANPacket *packetToAssemble,
 uint32_t GetMaxJointRevolutionsFromPacket(CANPacket *packet)
 {
     return DecodeBytesToIntMSBFirst(packet->data, 1, 4);
+}
+
+void AssembleEncoderInitializePacket(CANPacket *packetToAssemble,
+    uint8_t targetDeviceGroup,
+    uint8_t targetDeviceSerial,
+    uint8_t encoderType,
+    uint8_t angleDirection,
+    uint8_t zeroAngle)
+{
+    packetToAssemble->id = ConstructCANID(PRIO_MOTOR_UNIT_ENC_INIT, targetDeviceGroup, targetDeviceSerial);
+    packetToAssemble->dlc = DLC_MOTOR_UNIT_ENC_INIT;
+    int nextByte = WritePacketIDOnly(packetToAssemble->data, ID_MOTOR_UNIT_ENC_INIT);
+    packetToAssemble->data[nextByte] = 0;
+    if(encoderType)
+    {
+        packetToAssemble->data[nextByte] |= 0b100;
+    }
+    if(angleDirection)
+    {
+        packetToAssemble->data[nextByte] |= 0b010;
+    }
+    if(zeroAngle)
+    {
+        packetToAssemble->data[nextByte] |= 0b001;
+    }
+}
+
+uint8_t GetEncoderTypeFromPacket(CANPacket *packet)
+{
+    return(packet->data[1] & 0b100);
+}
+uint8_t GetEncoderDirectionFromPacket(CANPacket *packet)
+{
+    return(packet->data[1] & 0b010);
+}
+uint8_t GetEncoderZeroFromPacket(CANPacket *packet)
+{
+    return(packet->data[1] & 0b001);
 }

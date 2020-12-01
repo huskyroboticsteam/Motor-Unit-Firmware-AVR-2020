@@ -18,7 +18,7 @@ messaging.d messaging.o: .././messaging.c \
  ../include/usart.h ../include/config.h ../include/messaging.h \
  ../HindsightCAN/CANPacket.h ../HindsightCAN/CANSerialNumbers.h \
  ../include/pwm.h ../include/util.h ../include/timers.h \
- ../HindsightCAN/CANMotorUnit.h
+ ../HindsightCAN/CANCommon.h ../HindsightCAN/CANMotorUnit.h
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -75,5 +75,7 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 ../include/util.h:
 
 ../include/timers.h:
+
+../HindsightCAN/CANCommon.h:
 
 ../HindsightCAN/CANMotorUnit.h:

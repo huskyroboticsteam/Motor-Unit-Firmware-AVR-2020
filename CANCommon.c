@@ -135,7 +135,7 @@ void AssembleHeartbeatPacket(CANPacket *packetToAssemble,
     packetToAssemble->dlc = DLC_HEARTBEAT;
     int nextByte = WriteSenderSerialAndPacketID(packetToAssemble->data, ID_HEARTBEAT);
     packetToAssemble->data[nextByte] = heartbeatLeniencyCode;
-    PackIntIntoDataMSBFirst(packetToAssemble->data, timestamp, 3);
+    PackIntIntoDataMSBFirst(packetToAssemble->data, timestamp, nextByte + 1);
 }
 
 void AssembleFailReportPacket(CANPacket *packetToAssemble, 
@@ -194,9 +194,9 @@ void AssembleTelemetryTimingPacket(CANPacket *packetToAssemble,
 {
     packetToAssemble->id = ConstructCANID(PACKET_PRIORITY_NORMAL, targetGroup, targetSerial);
     packetToAssemble->dlc = DLC_TELEMETRY_TIMING;
-    int nextByte = WritePacketIDOnly(packetToAssemble->data, ID_TELEMETRY_TIMING);
+    int nextByte = WriteSenderSerialAndPacketID(packetToAssemble->data, ID_TELEMETRY_TIMING);
     packetToAssemble->data[nextByte] = telemetryTypeCode;
-    PackIntIntoDataMSBFirst(packetToAssemble->data, msBetweenReports, 3);
+    PackIntIntoDataMSBFirst(packetToAssemble->data, msBetweenReports, nextByte + 1);
 }
 uint32_t GetTelemetryTimingFromPacket(CANPacket *packetToAssemble)
 {
@@ -224,12 +224,12 @@ void AssembleTelemetryReportPacket(CANPacket *packetToAssemble,
     packetToAssemble->dlc = DLC_TELEMETRY_REPORT;
     int nextByte = WriteSenderSerialAndPacketID(packetToAssemble->data, ID_TELEMETRY_REPORT);
     packetToAssemble->data[nextByte] = telemetryTypeCode;
-    PackIntIntoDataMSBFirst(packetToAssemble->data, data, 3);
+    PackIntIntoDataMSBFirst(packetToAssemble->data, data, nextByte + 1);
 }
 
 int32_t DecodeTelemetryDataSigned(CANPacket *packet)
 {
-    return DecodeBytesToIntMSBFirst(packet->data, 3, 7);
+    return DecodeBytesToIntMSBFirst(packet->data, 4, 8);
 }
 
 uint32_t DecodeTelemetryDataUnsigned(CANPacket *packet)
@@ -239,7 +239,7 @@ uint32_t DecodeTelemetryDataUnsigned(CANPacket *packet)
 
 uint8_t DecodeTelemetryType(CANPacket *packet)
 {
-    return packet->data[2];
+    return packet->data[3];
 }
 
 void AssembleRGBColorPacket(CANPacket *packetToAssemble,

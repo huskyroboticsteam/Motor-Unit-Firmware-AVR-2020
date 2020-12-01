@@ -13,7 +13,10 @@
 #include "util.h"
 #include "timers.h"
 #include "CANPacket.h"
+#include "CANCommon.h"
 #include "CANMotorUnit.h"
+
+uint32_t ppjr = 1;
 
 /*Handle a received CAN message*/
 void handle_CAN_message(CANPacket *m){
@@ -36,13 +39,21 @@ void handle_CAN_message(CANPacket *m){
 			}
 			break;
 		case ID_MOTOR_UNIT_PID_POS_TGT_SET: //Set angle + velocity
-			//GetPIDTargetFromPacket()
-			//set_target_position(param1);
+			set_target_position(((GetPIDTargetFromPacket(m) * ppjr) / 360LL) / 1000LL);
 			//set_target_velocity(param2);
 			break;
-		/*//case 0x06: //Index
-		//	index_motor();
-		//	break;
+		case ID_ESTOP:
+			disable_motor();
+			break;
+		case ID_MOTOR_UNIT_ENC_INIT:
+			set_encoder_ticks(0);
+			break;
+		case ID_MOTOR_UNIT_ENC_PPJR_SET:
+			ppjr = GetEncoderPPJRFromPacket(m);
+			break;
+		/*case 0x06:
+			index_motor();
+			break;
 		//case 0x08: //Reset
 		//	enable_motor();
 		//	break;

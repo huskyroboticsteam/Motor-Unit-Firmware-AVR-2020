@@ -64,8 +64,9 @@ CANPacket ConstructCANPacket(uint16_t id, uint8_t dlc, uint8_t* data)
 int WriteSenderSerialAndPacketID(uint8_t *data, uint8_t packetID)
 {
     data[0] = packetID;
-    data[1] = ((getLocalDeviceGroup() & 0x03) << 6) | getLocalDeviceSerial();
-    return 2;
+    data[1] = getLocalDeviceGroup();
+    data[2] = getLocalDeviceSerial();
+    return 3;
 }
 
 // Writes packet ID to data bytes. Writes to byte 0 data.
@@ -89,7 +90,7 @@ int WritePacketIDOnly(uint8_t *data, uint8_t packetID)
 //                  (0 for high, 1 for low)
 uint8_t GetPacketPriority(CANPacket *packet)
 {
-    return (packet->id >> 10) && 0x1;
+    return (packet->id >> 10) & 0x1;
 }
 
 // Gets the device serial number from CAN packet
@@ -111,7 +112,7 @@ uint8_t GetDeviceSerialNumber(CANPacket *packet)
 //                  A byte representing the sender device number
 uint8_t GetSenderDeviceSerialNumber(CANPacket *packet)
 {
-    return (packet->data[1] & 0x3F);
+    return packet->data[2];
 }
 
 // Gets the device group code from CAN packet
@@ -135,9 +136,7 @@ uint8_t GetDeviceGroupCode(CANPacket *packet)
 //                  A byte representing the sender device number
 uint8_t GetSenderDeviceGroupCode(CANPacket *packet)
 {
-    uint8_t devGroupCode = (packet->data[0] & 0xC0) >> 4;
-    devGroupCode |= (packet->data[1] & 0xC0) >> 6;
-    return devGroupCode;
+    return packet->data[1];
 }
 
 // Ensures that the given packet is of a specified group
