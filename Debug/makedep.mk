@@ -6,21 +6,21 @@ adc.c
 
 bss.c
 
-CANCommon.c
-
-CANMotorUnit.c
-
-CANPacket.c
-
 encoder.c
+
+HindsightCAN\CANCommon.c
+
+HindsightCAN\CANMotorUnit.c
+
+HindsightCAN\CANPacket.c
+
+HindsightCAN\PortAT90CANxxx.c
 
 main.c
 
 messaging.c
 
 motor.c
-
-PortAT90CANxxx.c
 
 pwm.c
 

@@ -33,21 +33,22 @@ LINKER_SCRIPT_DEP:=
 
 # Every subdirectory with source files must be described here
 SUBDIRS :=  \
-../include
+../include \
+../HindsightCAN
 
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
 ../adc.c \
 ../bss.c \
-../CANCommon.c \
-../CANMotorUnit.c \
-../CANPacket.c \
 ../encoder.c \
+../HindsightCAN/CANCommon.c \
+../HindsightCAN/CANMotorUnit.c \
+../HindsightCAN/CANPacket.c \
+../HindsightCAN/PortAT90CANxxx.c \
 ../main.c \
 ../messaging.c \
 ../motor.c \
-../PortAT90CANxxx.c \
 ../pwm.c \
 ../servo.c \
 ../spi.c \
@@ -65,14 +66,14 @@ ASM_SRCS +=
 OBJS +=  \
 adc.o \
 bss.o \
-CANCommon.o \
-CANMotorUnit.o \
-CANPacket.o \
 encoder.o \
+HindsightCAN/CANCommon.o \
+HindsightCAN/CANMotorUnit.o \
+HindsightCAN/CANPacket.o \
+HindsightCAN/PortAT90CANxxx.o \
 main.o \
 messaging.o \
 motor.o \
-PortAT90CANxxx.o \
 pwm.o \
 servo.o \
 spi.o \
@@ -83,14 +84,14 @@ util.o
 OBJS_AS_ARGS +=  \
 adc.o \
 bss.o \
-CANCommon.o \
-CANMotorUnit.o \
-CANPacket.o \
 encoder.o \
+HindsightCAN/CANCommon.o \
+HindsightCAN/CANMotorUnit.o \
+HindsightCAN/CANPacket.o \
+HindsightCAN/PortAT90CANxxx.o \
 main.o \
 messaging.o \
 motor.o \
-PortAT90CANxxx.o \
 pwm.o \
 servo.o \
 spi.o \
@@ -101,14 +102,14 @@ util.o
 C_DEPS +=  \
 adc.d \
 bss.d \
-CANCommon.d \
-CANMotorUnit.d \
-CANPacket.d \
 encoder.d \
+HindsightCAN/CANCommon.d \
+HindsightCAN/CANMotorUnit.d \
+HindsightCAN/CANPacket.d \
+HindsightCAN/PortAT90CANxxx.d \
 main.d \
 messaging.d \
 motor.d \
-PortAT90CANxxx.d \
 pwm.d \
 servo.d \
 spi.d \
@@ -119,14 +120,14 @@ util.d
 C_DEPS_AS_ARGS +=  \
 adc.d \
 bss.d \
-CANCommon.d \
-CANMotorUnit.d \
-CANPacket.d \
 encoder.d \
+HindsightCAN/CANCommon.d \
+HindsightCAN/CANMotorUnit.d \
+HindsightCAN/CANPacket.d \
+HindsightCAN/PortAT90CANxxx.d \
 main.d \
 messaging.d \
 motor.d \
-PortAT90CANxxx.d \
 pwm.d \
 servo.d \
 spi.d \
@@ -162,28 +163,35 @@ LINKER_SCRIPT_DEP+=
 	@echo Finished building: $<
 	
 
-./CANCommon.o: .././CANCommon.c
-	@echo Building file: $<
-	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG -DCHIP_TYPE=CHIP_TYPE_AT90CANxxx  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include" -I"../include" -I"../HindsightCAN" -I"../HindsightCAN/PortFiles"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=at90can32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\at90can32" -c -std=gnu99 -I"C:\Users\John\Documents\Atmel Studio\7.0\MotorControlBoard\MotorControlBoard\include" -v -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
-./CANMotorUnit.o: .././CANMotorUnit.c
-	@echo Building file: $<
-	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG -DCHIP_TYPE=CHIP_TYPE_AT90CANxxx  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include" -I"../include" -I"../HindsightCAN" -I"../HindsightCAN/PortFiles"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=at90can32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\at90can32" -c -std=gnu99 -I"C:\Users\John\Documents\Atmel Studio\7.0\MotorControlBoard\MotorControlBoard\include" -v -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
-./CANPacket.o: .././CANPacket.c
-	@echo Building file: $<
-	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG -DCHIP_TYPE=CHIP_TYPE_AT90CANxxx  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include" -I"../include" -I"../HindsightCAN" -I"../HindsightCAN/PortFiles"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=at90can32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\at90can32" -c -std=gnu99 -I"C:\Users\John\Documents\Atmel Studio\7.0\MotorControlBoard\MotorControlBoard\include" -v -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
 ./encoder.o: .././encoder.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG -DCHIP_TYPE=CHIP_TYPE_AT90CANxxx  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include" -I"../include" -I"../HindsightCAN" -I"../HindsightCAN/PortFiles"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=at90can32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\at90can32" -c -std=gnu99 -I"C:\Users\John\Documents\Atmel Studio\7.0\MotorControlBoard\MotorControlBoard\include" -v -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+HindsightCAN/CANCommon.o: ../HindsightCAN/CANCommon.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG -DCHIP_TYPE=CHIP_TYPE_AT90CANxxx  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include" -I"../include" -I"../HindsightCAN" -I"../HindsightCAN/PortFiles"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=at90can32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\at90can32" -c -std=gnu99 -I"C:\Users\John\Documents\Atmel Studio\7.0\MotorControlBoard\MotorControlBoard\include" -v -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+HindsightCAN/CANMotorUnit.o: ../HindsightCAN/CANMotorUnit.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG -DCHIP_TYPE=CHIP_TYPE_AT90CANxxx  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include" -I"../include" -I"../HindsightCAN" -I"../HindsightCAN/PortFiles"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=at90can32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\at90can32" -c -std=gnu99 -I"C:\Users\John\Documents\Atmel Studio\7.0\MotorControlBoard\MotorControlBoard\include" -v -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+HindsightCAN/CANPacket.o: ../HindsightCAN/CANPacket.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG -DCHIP_TYPE=CHIP_TYPE_AT90CANxxx  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include" -I"../include" -I"../HindsightCAN" -I"../HindsightCAN/PortFiles"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=at90can32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\at90can32" -c -std=gnu99 -I"C:\Users\John\Documents\Atmel Studio\7.0\MotorControlBoard\MotorControlBoard\include" -v -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+HindsightCAN/PortAT90CANxxx.o: ../HindsightCAN/PortAT90CANxxx.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG -DCHIP_TYPE=CHIP_TYPE_AT90CANxxx  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include" -I"../include" -I"../HindsightCAN" -I"../HindsightCAN/PortFiles"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=at90can32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\at90can32" -c -std=gnu99 -I"C:\Users\John\Documents\Atmel Studio\7.0\MotorControlBoard\MotorControlBoard\include" -v -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
@@ -205,13 +213,6 @@ LINKER_SCRIPT_DEP+=
 	
 
 ./motor.o: .././motor.c
-	@echo Building file: $<
-	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG -DCHIP_TYPE=CHIP_TYPE_AT90CANxxx  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include" -I"../include" -I"../HindsightCAN" -I"../HindsightCAN/PortFiles"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=at90can32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\at90can32" -c -std=gnu99 -I"C:\Users\John\Documents\Atmel Studio\7.0\MotorControlBoard\MotorControlBoard\include" -v -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
-./PortAT90CANxxx.o: .././PortAT90CANxxx.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG -DCHIP_TYPE=CHIP_TYPE_AT90CANxxx  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include" -I"../include" -I"../HindsightCAN" -I"../HindsightCAN/PortFiles"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=at90can32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\at90can32" -c -std=gnu99 -I"C:\Users\John\Documents\Atmel Studio\7.0\MotorControlBoard\MotorControlBoard\include" -v -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

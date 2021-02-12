@@ -1,5 +1,6 @@
-PortAT90CANxxx.d PortAT90CANxxx.o: .././PortAT90CANxxx.c \
- ../HindsightCAN/Port.h ../HindsightCAN/CANPacket.h \
+HindsightCAN/PortAT90CANxxx.d HindsightCAN/PortAT90CANxxx.o: \
+ ../HindsightCAN/PortAT90CANxxx.c ../HindsightCAN/Port.h \
+ ../HindsightCAN/CANPacket.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdint.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdint.h \
  ../HindsightCAN/CANSerialNumbers.h \
