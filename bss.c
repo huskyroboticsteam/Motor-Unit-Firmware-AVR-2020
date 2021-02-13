@@ -66,7 +66,7 @@ void do_board_specific_setup(uint8_t addr){
 		}
 		#else
 		if(rev == 1){
-			tprintf("***WARNING*** Rev. 1 firmware on Rev. 2 board\n")
+			tprintf("***WARNING*** Rev. 1 firmware on Rev. 2 board\n");
 			set_LED(0, 3);
 			delay_mS(1000);
 		}

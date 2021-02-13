@@ -52,6 +52,6 @@
 extern uint8_t get_dip_switch();
 
 //Define REV_2 to use Revision 2 firmware
-#define REV_2
+//#define REV_2
 
 #endif

@@ -24,6 +24,17 @@ uint8_t get_dip_switch(){
 	return (~PINA) & 0xF;
 }
 
+void dump_packet(CANPacket *p){
+	tprintf("-CAN MESSAGE-\n");
+	tprintf("ID=%X\n", p->id);
+	tprintf("DLC=%d\n", p->dlc);
+	tprintf("Data:");
+	for(int i = 0;i < p->dlc;i++){
+		tprintf(" %X", p->data[i]);
+	}
+	tprintf("\n-END CAN MESSAGE-\n");
+}
+
 int main(){
 	CANPacket m;
 	DDRA = 0xF0;
@@ -55,6 +66,7 @@ int main(){
 		if(PollAndReceiveCANPacket(&m) == 0){
 			set_LED(3, 3);
 			update_LEDS(get_mS()/40);
+			dump_packet(&m);
 			handle_CAN_message(&m);
 			set_LED(3, 0);
 		}

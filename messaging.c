@@ -20,9 +20,11 @@ uint32_t ppjr = 1;
 
 /*Handle a received CAN message*/
 void handle_CAN_message(CANPacket *m){
+	tprintf("packet ID=%d\n", GetPacketID(m));
 	switch(GetPacketID(m)){
 		case ID_MOTOR_UNIT_MODE_SEL:; //Set Mode
 			uint8_t mode = GetModeFromPacket(m);
+			tprintf("mode set %d\n", mode);
 			if(mode == MOTOR_UNIT_MODE_PID){
 				set_motor_mode(get_motor_mode() | MOTOR_MODE_PID);
 				set_target_position(get_encoder_ticks());
@@ -33,8 +35,10 @@ void handle_CAN_message(CANPacket *m){
 			}
 			break;
 		case ID_MOTOR_UNIT_PWM_DIR_SET: //Set PWM/Direction
+			tprintf("PWM from packet=%d\n", GetPWMFromPacket(m));
 			if(!(get_motor_mode() & MOTOR_MODE_PID)){
 				int16_t mp = GetPWMFromPacket(m) / 32;
+				tprintf("Setting PWM to %d (scaled)\n", mp);
 				set_motor_power(mp);
 			}
 			break;
