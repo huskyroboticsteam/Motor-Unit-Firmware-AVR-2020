@@ -55,17 +55,19 @@ void do_board_specific_setup(uint8_t addr){
 		}
 		#ifdef REV_2
 		tprintf("REV. 2 firmware\n");
+		#else
+		tprintf("REV. 1 firmware\n");
 		#endif
 		uint8_t rev = detect_board();
 		tprintf("Detecting board rev: %d\n", rev);
 		#ifdef REV_2
-		if(rev != 2){
+		if(rev == 1){
 			tprintf("***WARNING*** Rev. 2 firmware on Rev. 1 board\n");
 			set_LED(0, 3);
 			delay_mS(1000);
 		}
-		#else
-		if(rev == 1){
+		#else //REV 1 firmware
+		if(rev == 2){
 			tprintf("***WARNING*** Rev. 1 firmware on Rev. 2 board\n");
 			set_LED(0, 3);
 			delay_mS(1000);

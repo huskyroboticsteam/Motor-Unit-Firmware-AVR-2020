@@ -47,7 +47,7 @@ int main(){
 	usart_init(19200); //Debug serial
 	set_LED(1, 3);
 	delay_mS(666); //Delay so one can connect to debug serial
-	uint16_t my_address = getLocalDeviceSerial();
+	uint16_t my_address = get_dip_switch();
 	tprintf("adr=%X\n", my_address);
 	delay_mS(250);
 	InitCAN(DEVICE_GROUP_MOTOR_CONTROL, my_address);
