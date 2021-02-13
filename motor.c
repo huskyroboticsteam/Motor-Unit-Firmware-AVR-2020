@@ -115,9 +115,9 @@ void set_motor_power(int16_t power){
 		set_motor_power_raw(0);
 		return;
 	}
-	if(reverse) power = -power;
+	//if(reverse) power = -power;
 	motor_power = power;
-	uint8_t limit_sw = get_motor_limit_switch_state();
+	/*uint8_t limit_sw = get_motor_limit_switch_state();
 	if(limit_sw & 1){
 		if(motor_power < 0){ 
 			motor_power = 0;
@@ -127,7 +127,7 @@ void set_motor_power(int16_t power){
 		if(motor_power > 0){
 			motor_power = 0;
 		}
-	}
+	}*/
 	//tprintf("%X\n", limit_sw);
 	//tprintf("Setting motor power to %d\n", motor_power);
 	set_motor_power_raw(motor_power);
