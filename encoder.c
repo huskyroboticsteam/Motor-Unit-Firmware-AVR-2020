@@ -12,6 +12,7 @@ volatile int16_t raw_velocity; //Raw velocity
 int16_t old_velocity; //The last velocity reading
 volatile uint8_t gate_control, gate_control_top; //For dynamically adjusted gate time for velocity computation
 //volatile uint8_t run_PID;
+volatile uint32_t ppjr = 1;
 
 #ifdef DEBOUNCE
 volatile uint16_t lastA, lastB;
@@ -36,6 +37,14 @@ int32_t get_encoder_ticks(){
 /*Sets the encoder counter to the specified value*/
 void set_encoder_ticks(int32_t ticks){
 	encoder_ticks = ticks;
+}
+
+int32_t ticks_to_angle(int32_t ticks){
+	return (ticks * (360L * 1000L)) / ppjr;
+}
+
+int32_t angle_to_ticks(int32_t angle){
+	return (angle * ppjr) / (360L * 1000L);
 }
 
 /*Initializes the encoder with A on PE6 and B on PE7*/

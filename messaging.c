@@ -16,8 +16,6 @@
 #include "CANCommon.h"
 #include "CANMotorUnit.h"
 
-uint32_t ppjr = 1;
-
 /*Handle a received CAN message*/
 void handle_CAN_message(CANPacket *m){
 	tprintf("packet ID=%d\n", GetPacketID(m));
@@ -43,7 +41,7 @@ void handle_CAN_message(CANPacket *m){
 			}
 			break;
 		case ID_MOTOR_UNIT_PID_POS_TGT_SET: //Set angle + velocity
-			set_target_position(((GetPIDTargetFromPacket(m) * ppjr) / 360LL) / 1000LL);
+			set_target_position(angle_to_ticks(GetPIDTargetFromPacket(m)));
 			//set_target_velocity(param2);
 			break;
 		case ID_ESTOP:
@@ -92,7 +90,6 @@ void handle_CAN_message(CANPacket *m){
 			set_LED(0, 2);
 			update_LEDS(get_mS()/40);
 			set_LED(0, 0);
-			break;
 			break;
 		default:
 			tprintf("Unknown CAN code %d\n", m->data[0]);

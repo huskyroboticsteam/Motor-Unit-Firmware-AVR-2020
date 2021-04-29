@@ -10,6 +10,9 @@
 #include "usart.h"
 #include "util.h"
 
+#include "CANCommon.h"
+#include "CANMotorUnit.h"
+
 uint16_t current;
 
 int32_t motor_target_pos; //Motor target position/
@@ -285,15 +288,15 @@ int32_t last = 0;
 void motor_control_tick(){
 	if(!(motor_mode & MOTOR_MODE_PID)){ //If the PID is disabled, simply unset the PID due flag
 		PID_due = 0;
-		int32_t t = get_encoder_ticks();
-		if(t != last){
-			tprintf("%l\n", t);
-			last = t;
-		}
 		if(get_mS() - last_set > MOTOR_SET_TIMEOUT){
 //			set_motor_power(0);
 			motor_power = 0;
 		}
+	}
+	if(get_mS() % 100 == 0){
+		CANPacket p;
+		AssembleTelemetryReportPacket(&p, DEVICE_GROUP_JETSON, DEVICE_SERIAL_JETSON, PACKET_TELEMETRY_ANG_POSITION, ticks_to_angle(get_encoder_ticks()));
+		SendCANPacket(&p);
 	}
 	if(check_motor_stall() || !(PINE & (1<<PE4))){ //Motor stall or fault pin asserted from motor driver
 		motor_power = 0;
