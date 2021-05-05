@@ -12,6 +12,7 @@
 
 #include "CANCommon.h"
 #include "CANMotorUnit.h"
+#include "Port.h"
 
 uint16_t current;
 
@@ -293,10 +294,11 @@ void motor_control_tick(){
 			motor_power = 0;
 		}
 	}
-	if(get_mS() % 100 == 0){
+	if(telem_timer >= telem_interval){
 		CANPacket p;
 		AssembleTelemetryReportPacket(&p, DEVICE_GROUP_JETSON, DEVICE_SERIAL_JETSON, PACKET_TELEMETRY_ANG_POSITION, ticks_to_angle(get_encoder_ticks()));
 		SendCANPacket(&p);
+		telem_timer = 0;
 	}
 	if(check_motor_stall() || !(PINE & (1<<PE4))){ //Motor stall or fault pin asserted from motor driver
 		motor_power = 0;

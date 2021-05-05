@@ -7,5 +7,6 @@ uint32_t get_uS();
 void delay_mS(uint16_t mS);
 
 extern volatile uint8_t PID_due;
+extern volatile uint8_t telem_timer;
 
 #endif

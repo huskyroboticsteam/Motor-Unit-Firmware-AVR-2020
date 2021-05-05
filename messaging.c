@@ -16,6 +16,8 @@
 #include "CANCommon.h"
 #include "CANMotorUnit.h"
 
+volatile uint8_t telem_interval = 5;
+
 /*Handle a received CAN message*/
 void handle_CAN_message(CANPacket *m){
 	tprintf("packet ID=%d\n", GetPacketID(m));
@@ -52,6 +54,9 @@ void handle_CAN_message(CANPacket *m){
 			break;
 		case ID_MOTOR_UNIT_ENC_PPJR_SET:
 			ppjr = GetEncoderPPJRFromPacket(m);
+			break;
+		case ID_TELEMETRY_TIMING:
+			telem_interval = (GetTelemetryTimingFromPacket(m) + 10) / 20;
 			break;
 		/*case 0x06:
 			index_motor();

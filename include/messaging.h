@@ -3,6 +3,8 @@
 
 #include "CANPacket.h"
 
+extern volatile uint8_t telem_interval;
+
 void handle_CAN_message(CANPacket *m);
 int send_CAN_message(uint8_t target, uint8_t length, void *buffer, uint8_t priority);
 void send_model_number(uint8_t target);
