@@ -24,15 +24,9 @@
 
 #define MOTOR_SET_TIMEOUT 1250 //number of milliseconds until motor is automatically disabled after the last motor set
 
-#define DEFAULT_Kp_1 140 //Default Kp for position PID
-#define DEFAULT_Ki_1 20  //Default Ki for position PID
-#define DEFAULT_Kd_1 100 //Default Kd for position PID
-
-//#define DUAL_PID //Define to use dual PID mode. Otherwise uses single PID mode
-
-#define DEFAULT_Kp_2 1 //Default Kp for velocity PID
-#define DEFAULT_Ki_2 1 //Default Ki for velocity PID
-#define DEFAULT_Kd_2 1 //Default Kd for velocity PID
+#define DEFAULT_Kp_1 0 //Default Kp for position PID
+#define DEFAULT_Ki_1 0  //Default Ki for position PID
+#define DEFAULT_Kd_1 0 //Default Kd for position PID
 
 #define USART_TX_BUF_SZ 16 //UART TX buffer size
 #define USART_RX_BUF_SZ 16 //UART RX buffer size
@@ -52,6 +46,6 @@
 extern uint8_t get_dip_switch();
 
 //Define REV_2 to use Revision 2 firmware
-//#define REV_2
+#define REV_2
 
 #endif

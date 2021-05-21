@@ -66,7 +66,7 @@ int main(){
 		if(PollAndReceiveCANPacket(&m) == 0){
 			set_LED(3, 3);
 			update_LEDS(get_mS()/40);
-			dump_packet(&m);
+			//dump_packet(&m);
 			handle_CAN_message(&m);
 			set_LED(3, 0);
 		}

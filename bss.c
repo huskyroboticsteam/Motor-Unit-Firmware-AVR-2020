@@ -34,9 +34,6 @@ uint8_t detect_board(){
 */
 void do_board_specific_setup(uint8_t addr){
 		set_LED(3, 3);
-		set_Kp(120, 0);
-		set_Ki(20, 0);
-		set_Kd(170, 0);
 		switch(addr){
 			case 0x0: //Base rotation:
 				set_ticks_per_10degrees(172);

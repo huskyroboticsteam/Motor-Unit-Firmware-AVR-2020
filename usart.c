@@ -137,6 +137,11 @@ void tprintf(const char *fmt, ...){
 		switch(c){
 			case 'l':
 				l = va_arg(va, int32_t);
+				uint8_t neg = l < 0;
+				if(neg){
+					l = -l;
+					usart_write_char('-');
+				}
 				if(l > 32767){
 					itoa(l/10000, buf, 10);
 					usart_write_string(buf);

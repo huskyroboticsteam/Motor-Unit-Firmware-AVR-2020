@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "config.h"
+#include <util/delay.h>
 #include "can.h"
 #include "motor.h"
 #include "encoder.h"
@@ -26,9 +27,10 @@ void handle_CAN_message(CANPacket *m){
 			uint8_t mode = GetModeFromPacket(m);
 			tprintf("mode set %d\n", mode);
 			if(mode == MOTOR_UNIT_MODE_PID){
+				disable_motor();
 				set_motor_mode(get_motor_mode() | MOTOR_MODE_PID);
+				tprintf("In mode set\n");
 				set_target_position(get_encoder_ticks());
-				enable_motor();
 			} else if(mode == MOTOR_UNIT_MODE_PWM){
 				set_motor_mode(get_motor_mode() & ~MOTOR_MODE_PID);
 				enable_motor();
@@ -42,9 +44,14 @@ void handle_CAN_message(CANPacket *m){
 				set_motor_power(mp);
 			}
 			break;
-		case ID_MOTOR_UNIT_PID_POS_TGT_SET: //Set angle + velocity
-			set_target_position(angle_to_ticks(GetPIDTargetFromPacket(m)));
-			//set_target_velocity(param2);
+		case ID_MOTOR_UNIT_PID_POS_TGT_SET: ;//Set angle + velocity
+			int32_t angle = GetPIDTargetFromPacket(m);
+			int32_t ticks = angle_to_ticks(angle);
+			tprintf("Setting PID target to angle %l (%l ticks)\n", angle, ticks);
+			tprintf("Current = %l\n", get_encoder_ticks());
+			//_delay_ms(1000);
+			set_target_position(ticks);
+			enable_motor();
 			break;
 		case ID_ESTOP:
 			disable_motor();
@@ -57,6 +64,18 @@ void handle_CAN_message(CANPacket *m){
 			break;
 		case ID_TELEMETRY_TIMING:
 			telem_interval = (GetTelemetryTimingFromPacket(m) + 10) / 20;
+			break;
+		case ID_MOTOR_UNIT_PID_P_SET:
+			tprintf("setting p\n");
+			set_Kp(GetPFromPacket(m));
+			break;
+		case ID_MOTOR_UNIT_PID_I_SET:
+			tprintf("setting i\n");
+			set_Ki(GetIFromPacket(m));
+			break;
+		case ID_MOTOR_UNIT_PID_D_SET:
+			tprintf("setting d\n");
+			set_Kd(GetDFromPacket(m));
 			break;
 		/*case 0x06:
 			index_motor();

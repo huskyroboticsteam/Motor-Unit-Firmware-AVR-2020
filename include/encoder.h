@@ -1,7 +1,7 @@
 #ifndef ENCODER_H
 #define ENCODER_H
 
-extern volatile uint32_t ppjr;
+extern volatile int32_t ppjr;
 
 int32_t get_encoder_ticks();
 int16_t get_encoder_velocity();

@@ -17,20 +17,11 @@
 uint16_t current;
 
 int32_t motor_target_pos; //Motor target position/
-int16_t motor_target_vel; //Motor target velocity
 int32_t motor_max_pos; //The maximum position of the motor
 int32_t last_pos_err; //Last position error (for dp)
 int32_t pos_i; //Position integral
 uint16_t Kp, Ki, Kd;
-#ifdef DUAL_PID
-int16_t last_vel_err; //Last velocity error (for dv)
-int32_t vel_i; //Velocity integral
-uint16_t Kp2, Ki2, Kd2;
-#else
 int32_t pid_target; //The current, actual target for the position PID
-uint8_t tgt_inc; //The increment for the PID target
-uint8_t slow; //"Slow" mode (less than 5 encoder ticks per 20mS)
-#endif
 uint16_t pid_runs; //The number of times the PID has run
 int16_t motor_power;
 uint8_t reverse = 0;
@@ -62,14 +53,7 @@ void init_motor(){
 	Kp = DEFAULT_Kp_1;
 	Ki = DEFAULT_Ki_1;
 	Kd = DEFAULT_Kd_1;
-	#ifdef DUAL_PID
-	Kp2 = DEFAULT_Kp_2;
-	Ki2 = DEFAULT_Ki_2;
-	Kd2 = DEFAULT_Kd_2;
-	#else
 	pid_target = 0;
-	#endif
-	set_target_velocity(DEFAULT_MOTOR_VELOCITY);
 	init_encoder();
 }
 
@@ -121,17 +105,6 @@ void set_motor_power(int16_t power){
 	}
 	//if(reverse) power = -power;
 	motor_power = power;
-	/*uint8_t limit_sw = get_motor_limit_switch_state();
-	if(limit_sw & 1){
-		if(motor_power < 0){ 
-			motor_power = 0;
-		}
-	}
-	if(limit_sw & 2){
-		if(motor_power > 0){
-			motor_power = 0;
-		}
-	}*/
 	//tprintf("%X\n", limit_sw);
 	//tprintf("Setting motor power to %d\n", motor_power);
 	set_motor_power_raw(motor_power);
@@ -143,15 +116,8 @@ Parameters:
 uint16_t p1: The new value for Kp for position
 uint16_t p2: The new value for Kp for velocity
 */
-void set_Kp(uint16_t p1, uint16_t p2){
-	if(p1 != 0){
-		Kp = p1;
-	}
-	#ifdef DUAL_PID
-	if(p2 != 0){
-		Kp2 = p2;
-	}
-	#endif
+void set_Kp(uint16_t p){
+	Kp = p;
 }
 
 /*Sets Ki for both PID loops. Value unchanged if a parameter is 0
@@ -159,15 +125,8 @@ Parameters:
 uint16_t i1: The new value for Ki for position
 uint16_t i2: The new value for Ki for velocity
 */
-void set_Ki(uint16_t i1, uint16_t i2){
-	if(i1 != 0){
-		Ki = i1;
-	}
-	#ifdef DUAL_PID
-	if(i2 != 0){
-		Ki2 = i2;
-	}
-	#endif
+void set_Ki(uint16_t i){
+	Ki = i;
 }
 
 /*Sets Kd for both PID loops. Value unchanged if a parameter is 0
@@ -175,15 +134,8 @@ Parameters:
 uint16_t d1: The new value for Kd for position
 uint16_t d2: The new value for Kd for velocity
 */
-void set_Kd(uint16_t d1, uint16_t d2){
-	if(d1 != 0){
-		Kd = d1;
-	}
-	#ifdef DUAL_PID
-	if(d2 != 0){
-		Kd2 = d2;
-	}
-	#endif
+void set_Kd(uint16_t d){
+	Kd = d;
 }
 
 int16_t avg;
@@ -234,7 +186,7 @@ void set_motor_current_limit(uint16_t current){
 /*Sets a target position for the motor*/
 void set_target_position(int32_t position){
 	//if(position < 0 || position > motor_max_pos) return; //Disallow setting motor to position outside the encoder range
-	tprintf("setting target p to %l\n", position);
+	//tprintf("setting target p to %l\n", position);
 	//if(position < 0) return;
 	if(int_abs(motor_target_pos - position) > 100){
 		pos_i = 0;
@@ -242,30 +194,9 @@ void set_target_position(int32_t position){
 	motor_target_pos = position;
 }
 
-/*Sets a target velocity for the motor*/
-void set_target_velocity(uint16_t velocity){
-	tprintf("setting target v to %l\n", velocity);
-	motor_target_vel = velocity;
-	#ifndef DUAL_PID
-	if(velocity / 25 < 5){ //Less than 5 encoder ticks per PID tick
-		slow = 1; //Slow mode
-		tgt_inc = 125 / velocity + ((125 % velocity) > velocity/2); //Integer division + rounding
-	} else {
-		slow = 0;
-		tgt_inc = velocity / 25; //Otherwise, set up the increment
-	}
-	#endif
-	tprintf("slow = %d, tgt_inc = %d\n", slow, tgt_inc);
-}
-
 /*Gets the target position for the motor*/
 int32_t get_target_position(){
 	return motor_target_pos;
-}
-
-/*Gets the target velocity for the motor*/
-int32_t get_target_velocity(){
-	return motor_target_vel;
 }
 
 /*Gets the current motor velocity*/
@@ -275,9 +206,6 @@ int16_t get_motor_velocity(){
 
 void index_motor(){
 	motor_mode |= MOTOR_MODE_INDEX;
-	if(motor_target_vel == 0){
-		set_target_velocity(DEFAULT_MOTOR_VELOCITY); //Indexing won't work if this is 0.
-	}
 	motor_target_pos = -262144; //Big negative number. We should hit the limit switch before this
 }
 #ifdef DEBUG
@@ -296,7 +224,9 @@ void motor_control_tick(){
 	}
 	if(telem_timer >= telem_interval){
 		CANPacket p;
-		AssembleTelemetryReportPacket(&p, DEVICE_GROUP_JETSON, DEVICE_SERIAL_JETSON, PACKET_TELEMETRY_ANG_POSITION, ticks_to_angle(get_encoder_ticks()));
+		int32_t angle = ticks_to_angle(get_encoder_ticks());
+		//tprintf("sending angle: %l\n", angle);
+		AssembleTelemetryReportPacket(&p, DEVICE_GROUP_JETSON, DEVICE_SERIAL_JETSON, PACKET_TELEMETRY_ANG_POSITION, angle);
 		SendCANPacket(&p);
 		telem_timer = 0;
 	}
@@ -307,54 +237,9 @@ void motor_control_tick(){
 		set_LED(0, 1);
 	}
 	if(motor_mode & MOTOR_MODE_PID && PID_due){ //Are we supposed to run the PID?
-	//	tprintf("period=%d\n", get_mS() - last);
-	//	last=get_mS();
-		#ifdef DUAL_PID
-		/*Velocity PID*/
-		int16_t vel = get_motor_velocity();
-		int16_t errorv; 
-		if(get_encoder_ticks() < motor_target_pos){ //Check what direction we need to go. If the enc. ticks are less than the target, we need to go forward
-			errorv = motor_target_vel - vel;
-		} else { //Otherwise we're going backwards
-			errorv = (-motor_target_vel) - vel; //We need the velocity to be negative if the motor needs to run backwards
-		}
-		int16_t dv = errorv - last_vel_err; //d term
-		last_vel_err = errorv; 
-		int32_t mvp = (errorv*Kp2)/20 + (vel_i*Ki2)/20 + (dv*Kd2)/20; //Compute the motor power for the velocity loop
-		//int32_t mvp = errorv/2 + vel_i / 8 + dv/10;
-	//	tprintf("%d %d %d %d %d %d | ", (int16_t)motor_target_vel, (int16_t)vel, (int16_t)errorv, (int16_t)dv, (int16_t)vel_i, (int16_t)mvp);
-		if(errorv < -16 || errorv > 16)
-			vel_i += errorv; //Update the integral term. Ignore small steady state errors
-		if(vel_i > 16384) vel_i = 16384; //Constrain the intergral term to prevent integral wind-up
-		if(vel_i < -16384) vel_i = -16384;
-		if(mvp > 1023) mvp = 1023;
-		if(mvp < -1023) mvp = -1023;
-		uint32_t pid_target = motor_target_pos;
-		#else /*Single PID*/
-		if(slow){ //Slow mode. Change the target at most 5 ticks per PID loop
-			if(pid_runs % tgt_inc == 0){ //Are we supposed to increment this tick?
-				if(motor_target_pos > pid_target){ //The real target is bigger than the PID's current target
-					pid_target += min(5, motor_target_pos - pid_target); //Increment at most 5 ticks but don't go over the real target
-				} else if(motor_target_pos < pid_target){ //The real target is smaller than the PID's current target
-					pid_target -= min(5, pid_target - motor_target_pos); //Deincrement at most 5 ticks but don't go under the real target
-				}
-			}
-		} else { //Fast mode
-			if(motor_target_pos > pid_target){ //The real target is bigger than the PID's current target
-					pid_target += min(tgt_inc, motor_target_pos - pid_target); //Increment by at most tgt_inc
-			} else if(motor_target_pos < pid_target){ //The real target is smaller than the PID's current target
-					pid_target -= min(tgt_inc, pid_target - motor_target_pos); //Deincrement by at most tgt_inc
-			}
-		}
-		#endif
+		pid_target = motor_target_pos;
 		/*Position PID*/
 		int32_t pos = get_encoder_ticks();
-		#ifndef DUAL_PID
-		if(pos < pid_target - 128 || pos > pid_target + 128){ /*If there is a large error, the PID is out of lock*/
-		//	tprintf("Assinging PID target %l, %l\n", pid_target, pos);
-	//		pid_target = pid_target/2 + pos/2; //Adjust the PID target closer to the actual motor position to keep it from racing to it
-		}
-		#endif
 		int32_t errorp = pos - pid_target; //P
 		int32_t dp = errorp - last_pos_err; //D
 		last_pos_err = errorp;
@@ -366,30 +251,29 @@ void motor_control_tick(){
 			if(pos_i > 768) pos_i = 768; /*Constrain integral to avoid integral wind-up*/
 			if(pos_i < -768) pos_i = -768;
 			int32_t mpp = (errorp*Kp)/20 + (pos_i*Ki)/20 + (dp*Kd)/20;
-			if(mpp > 384) mpp = 384; /*Clamp the motor power to the accepted range of -1023 to +1023*/
-			if(mpp < -384) mpp = -384;		
+			if(mpp > 512) mpp = 512; /*Clamp the motor power to the accepted range of -1023 to +1023*/
+			if(mpp < -512) mpp = -512;		
 			motor_power = mpp; //Set the motor power to the output
-			#ifdef DUAL_PID
-			if(int_abs(errorp) > 100){ //If there is a large error, let the velocity PID take over
-				motor_power = mvp;
-			}
-			#endif
 		}
-		#ifdef DEBUG
-		av = (av*9)/10 + get_motor_velocity()/10;
+		//#ifdef DEBUG
+		//av = (av*9)/10 + get_motor_velocity()/10;
 		//tprintf("%l %l %l %d %d %d %d %d\n", (int32_t)motor_target_pos, (int32_t)pid_target, (int32_t)pos, (int16_t)errorp, (int16_t)dp, (int16_t)pos_i, (int16_t)motor_power, av);
 		//tprintf("%d %d %d %d\n", (int16_t)pid_target, (int16_t)pos, (int16_t)av, (int16_t)motor_power);
-		tprintf("%d %d\n", (int16_t)pos, motor_power);
+		if(pid_runs % 10 == 0){
+			tprintf("pos = %d, target = %d, p = %d, i = %d, d = %d, power = %d\n", (int)pos, (int)pid_target, (int)errorp, (int)pos_i, (int)dp, (int)motor_power);
+		}
+		//tprintf("%d %d\n", (int16_t)pos, motor_power);
 		//last_mS = get_mS();
-		#endif
+		//#endif
 		pid_runs++;
 		PID_due = 0; //We're done running the PID for now
 	}
 	uint8_t limit_sw = get_motor_limit_switch_state();
+	//tprintf("ls=%d\n", limit_sw);
 	if(limit_sw & 1){
 //		reset_encoder();
-		if(motor_mode & MOTOR_MODE_INDEX) /*We're in index mode and hit the loewr limit*/
-			motor_mode &= ~MOTOR_MODE_INDEX; //we hit the limit switch. leave indexing mode
+		//if(motor_mode & MOTOR_MODE_INDEX) /*We're in index mode and hit the loewr limit*/
+			//motor_mode &= ~MOTOR_MODE_INDEX; //we hit the limit switch. leave indexing mode
 			//motor_target_pos = 262144; //Now try to find the upper limit
 		if(motor_target_pos < 0)
 			motor_target_pos = 0;
@@ -404,9 +288,9 @@ void motor_control_tick(){
 	/*	if(motor_target_pos > motor_max_pos){
 			motor_target_pos = motor_max_pos;
 		}*/
-		if(motor_mode & MOTOR_MODE_INDEX){ //Are we in index mode?
-			motor_mode &= ~MOTOR_MODE_INDEX; //Leave indexing mode
-		}
+		//if(motor_mode & MOTOR_MODE_INDEX){ //Are we in index mode?
+		//	motor_mode &= ~MOTOR_MODE_INDEX; //Leave indexing mode
+		//}
 		if(motor_power > 0){
 			motor_power = 0;
 			set_motor_power_raw(0);
