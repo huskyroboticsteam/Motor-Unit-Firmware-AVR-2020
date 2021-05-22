@@ -1,0 +1,3 @@
+[submodule "HindsightCAN"]
+	path = HindsightCAN
+	url = https://github.com/huskyroboticsteam/HindsightCAN
