@@ -24,10 +24,11 @@ uint16_t Kp, Ki, Kd;
 int32_t pid_target; //The current, actual target for the position PID
 uint16_t pid_runs; //The number of times the PID has run
 int16_t motor_power;
+uint16_t max_pwm;
 uint8_t reverse = 0;
 uint32_t last_set;
 
-uint16_t motor_max_current;
+//uint16_t motor_max_current;
 
 uint8_t motor_mode; //Tracks the motor mode
 
@@ -45,7 +46,7 @@ void init_motor(){
 	DDRE |= (1<<PE5);
 	PORTD = 3; //Turn on limit switch pullup
 	motor_max_pos = 1024; //BS this since we don't know yet
-	motor_max_current = DEFAULT_MOTOR_CURRENT_LIMIT; 
+	max_pwm = 1023;
 	motor_target_pos = 0; //The encoder should start at 0 so this is a reasonable default
 	pid_runs = 0;
 	motor_power = 0;
@@ -102,6 +103,12 @@ void set_motor_power(int16_t power){
 	if(!(motor_mode & MOTOR_MODE_ENABLED)){
 		set_motor_power_raw(0);
 		return;
+	}
+	if(power > max_pwm){
+		power = max_pwm;
+	}
+	if(power < -max_pwm){
+		power = -max_pwm;
 	}
 	//if(reverse) power = -power;
 	motor_power = power;
@@ -162,7 +169,7 @@ int16_t get_motor_current(){
 }
 
 /*Returns true if the motor is stalled*/
-uint8_t check_motor_stall(){
+uint8_t inline check_motor_stall(){
 	return FALSE;/*
 	static uint32_t overcurrent_since;
 	if(get_motor_current() > motor_max_current){
@@ -175,12 +182,15 @@ uint8_t check_motor_stall(){
 	return FALSE;*/
 }
 
-/*Sets the maximum motor current in mA.
-Parameters:
-uin16_t current: The max motor current in milliamps
-*/
-void set_motor_current_limit(uint16_t current){
-	motor_max_current = current;
+void set_max_pwm(uint16_t new_max){
+	if(new_max > 1023){
+		new_max = 1023;
+	}
+	max_pwm = new_max;
+}
+
+uint16_t inline get_max_pwm(){
+	return max_pwm;
 }
 
 /*Sets a target position for the motor*/
@@ -195,12 +205,12 @@ void set_target_position(int32_t position){
 }
 
 /*Gets the target position for the motor*/
-int32_t get_target_position(){
+int32_t inline get_target_position(){
 	return motor_target_pos;
 }
 
 /*Gets the current motor velocity*/
-int16_t get_motor_velocity(){
+int16_t inline get_motor_velocity(){
 	return get_encoder_velocity();
 }
 
@@ -208,6 +218,7 @@ void index_motor(){
 	motor_mode |= MOTOR_MODE_INDEX;
 	motor_target_pos = -262144; //Big negative number. We should hit the limit switch before this
 }
+
 #ifdef DEBUG
 int16_t av;
 #endif

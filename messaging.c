@@ -77,6 +77,14 @@ void handle_CAN_message(CANPacket *m){
 			tprintf("setting d\n");
 			set_Kd(GetDFromPacket(m));
 			break;
+		case ID_MOTOR_UNIT_MAX_PID_PWM:;
+			uint16_t v = GetMaxPIDPWMPacket(m);
+			if(v > 32767){
+				v = 32767;
+			}
+			tprintf("Setting max PWM to %d\n", v);
+			set_max_pwm(v / 32);
+			break;
 		/*case 0x06:
 			index_motor();
 			break;
