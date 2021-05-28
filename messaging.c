@@ -78,7 +78,7 @@ void handle_CAN_message(CANPacket *m){
 			set_Kd(GetDFromPacket(m));
 			break;
 		case ID_MOTOR_UNIT_MAX_PID_PWM:;
-			uint16_t v = GetMaxPIDPWMPacket(m);
+			uint16_t v = GetMaxPIDPWMFromPacket(m);
 			if(v > 32767){
 				v = 32767;
 			}
