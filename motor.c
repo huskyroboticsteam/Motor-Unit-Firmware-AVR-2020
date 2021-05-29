@@ -24,7 +24,7 @@ uint16_t Kp, Ki, Kd;
 int32_t pid_target; //The current, actual target for the position PID
 uint16_t pid_runs; //The number of times the PID has run
 int16_t motor_power;
-uint16_t max_pwm;
+int16_t max_pwm;
 uint8_t reverse = 0;
 uint32_t last_set;
 
